@@ -9,8 +9,8 @@ export default function Enemies() {
   return (
     <div className={'enemies-side'}>
       {
-        enemies.map(enemy => {
-          return <Enemy key={enemy.id} enemy={enemy} />
+        enemies.map(enemyId => {
+          return <Enemy key={enemyId} enemyId={enemyId} />
         })
       }
     </div>

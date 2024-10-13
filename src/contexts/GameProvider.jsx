@@ -1,6 +1,8 @@
-import {useReducer} from "react";
+// import {useReducer} from "react";
+import { useImmerReducer } from "use-immer";
 
 import { GameContext, GameDispatchContext } from './GameContext.js'
+import {current} from "immer";
 
 const initialState = {
   player: {
@@ -13,8 +15,8 @@ const initialState = {
       regen: 3,
     }
   },
-  enemies: [
-    {
+  enemiesById: {
+    1: {
       id: 1,
       type: 'goblin',
       health: {
@@ -22,7 +24,7 @@ const initialState = {
         max: 50
       }
     },
-    {
+    2: {
       id: 2,
       type: 'hamster',
       health: {
@@ -30,37 +32,27 @@ const initialState = {
         max: 10
       }
     }
-  ],
-  hand: [
-    { id: 1, name: 'Attack', description: 'hi' },
-    { id: 2, name: 'Attack', description: 'hi' },
-    { id: 3, name: 'Block', description: 'bye' },
-  ],
+  },
+  enemies: [1, 2],
+  cardsById: {
+    1: { id: 1, name: 'Attack', description: 'hi', damage: 10 },
+    2: { id: 2, name: 'Attack', description: 'hi', damage: 10 },
+    3: { id: 3, name: 'Block', description: 'bye', block: 5 },
+  },
+  hand: [1, 2, 3],
   deck: [],
   discard: [],
   equipment: []
 }
 
-function gameReducer(tasks, action) {
+function gameReducer(draft, action) {
   switch (action.type) {
-    case 'added': {
-      return [...tasks, {
-        id: action.id,
-        text: action.text,
-        done: false
-      }];
-    }
-    case 'changed': {
-      return tasks.map(t => {
-        if (t.id === action.task.id) {
-          return action.task;
-        } else {
-          return t;
-        }
-      });
-    }
-    case 'deleted': {
-      return tasks.filter(t => t.id !== action.id);
+    case 'useCardOnEnemy': {
+      const card = draft.cardsById[action.cardId];
+      if (card.damage) {
+        draft.enemiesById[action.enemyId].health.current -= card.damage;
+      }
+      return;
     }
     default: {
       throw Error('Unknown action: ' + action.type);
@@ -69,7 +61,7 @@ function gameReducer(tasks, action) {
 }
 
 export function GameProvider({ children }) {
-  const [state, dispatch] = useReducer(
+  const [state, dispatch] = useImmerReducer(
     gameReducer,
     initialState
   );

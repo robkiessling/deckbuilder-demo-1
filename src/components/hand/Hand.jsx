@@ -9,8 +9,8 @@ export default function Hand() {
   return (
     <div className={'hand'}>
       {
-        hand.map(card => {
-          return <Card key={card.id} card={card} />
+        hand.map(cardId => {
+          return <Card key={cardId} cardId={cardId} />
         })
       }
     </div>
