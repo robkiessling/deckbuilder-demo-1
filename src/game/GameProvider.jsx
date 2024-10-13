@@ -3,19 +3,25 @@ import { produce } from "immer";
 
 import {GameContext, GameDispatchContext} from './GameContext.js'
 import {current} from "immer";
-import {cardTemplates, effects, enemyTemplates} from "./Database.js";
+import {cardTemplates, cardEffects, enemyTemplates, enemyEffects} from "./Database.js";
 
 let id = 1;
 
 const initialState = {
+  isPlayerTurn: true,
+
   player: {
     health: {
       current: 33,
       max: 50
     },
+    block: {
+      current: 0,
+      max: 999
+    },
     energy: {
       current: 3,
-      regen: 3,
+      max: 3,
     }
   },
 
@@ -39,6 +45,7 @@ function createEnemy(state, template) {
   const enemy = produce(enemyTemplates[template], draft => {
     draft.id = id++;
     draft.template = template;
+    draft.performedAction = false;
   });
 
   state.enemiesById[enemy.id] = enemy;
@@ -64,15 +71,39 @@ function gameReducer(draft, action) {
       createCardInHand(draft, action.template);
       break;
     }
+    case 'startPlayerTurn': {
+      draft.isPlayerTurn = true;
+      draft.player.energy.current = draft.player.energy.max;
+      draft.player.block.current = 0;
+      break;
+    }
+    case 'endPlayerTurn': {
+      draft.isPlayerTurn = false;
+      draft.enemyIds.forEach(enemyId => {
+        draft.enemiesById[enemyId].performedAction = false;
+      })
+      break;
+    }
+    case 'nextEnemyAction': {
+      for (let i = 0; i < draft.enemyIds.length; i++) {
+        const enemy = draft.enemiesById[draft.enemyIds[i]];
+        if (!enemy.performedAction) {
+          enemyEffects.attack(draft, draft.player, enemy);
+          enemy.performedAction = true;
+          break;
+        }
+      }
+      break;
+    }
     case 'useCardNoTarget': {
       const card = draft.cardsById[action.cardId];
-      const effect = effects[card.effect];
+      const effect = cardEffects[card.effect];
       effect(draft, card, draft.player)
       break;
     }
     case 'useCardOnEnemy': {
       const card = draft.cardsById[action.cardId];
-      const effect = effects[card.effect]
+      const effect = cardEffects[card.effect]
       effect(draft, card, draft.player, draft.enemiesById[action.enemyId])
       break;
     }

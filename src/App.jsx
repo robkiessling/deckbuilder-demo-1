@@ -6,6 +6,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import Battlefield from "./components/battlefield/Battlefield.jsx";
 import Hand from "./components/hand/Hand.jsx";
+import Energy from "./components/energy/Energy.jsx";
+import EndTurn from "./components/end_turn/EndTurn.jsx";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <DndProvider backend={HTML5Backend}>
         <Battlefield />
         <Hand />
+        <Energy />
+        <EndTurn />
       </DndProvider>
     </GameProvider>
   )

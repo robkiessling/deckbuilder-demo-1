@@ -2,6 +2,7 @@
   height: 100%;
   width: 100%;
   //padding-bottom: 15rem;
+  position: relative;
 
   display: flex;
   justify-content: center;
@@ -11,5 +12,17 @@
   border: 1px solid transparent;
   &.card-hover {
     border: 1px solid white;
+  }
+
+
+  .current-turn {
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+
+    letter-spacing: 2px;
+    font-size: 1.5rem;
+    border-bottom: 1px solid white;
   }
 }

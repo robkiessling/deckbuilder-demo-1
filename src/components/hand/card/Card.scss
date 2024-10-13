@@ -5,6 +5,7 @@
   height: 10rem;
   width: 8rem;
   border-radius: 5px;
+  position: relative;
 
   display: flex;
   flex-direction: column;
@@ -15,19 +16,49 @@
     //border: 3px solid white;
   }
 
-  border: 1px solid transparent;
+  border: 2px solid transparent;
 
   &:hover {
     height: 11rem;
     width: 8.8rem;
     margin-top: -1rem;
     font-size: 1rem;
-    border: 1px solid white;
+    //border: 1px solid white;
   }
 
   .name {
     font-weight: bold;
     padding: 0.5rem 0;
+  }
+
+  .energy {
+    position: absolute;
+    top: -0.5rem;
+    left: -0.75rem;
+    height: 1.75rem;
+    width: 1.75rem;
+    border-radius: 2rem;
+    background: #4148cb;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    //font-weight: bold;
+    font-size: 1.15rem;
+    border: 1px solid #777;
+  }
+
+  &.sufficient {
+    border: 2px solid #75ff75;
+  }
+  &.insufficient {
+    //&:hover {
+    //  border: 1px solid red;
+    //}
+
+    .energy {
+      color: #ff1e1e;
+    }
   }
 
 }

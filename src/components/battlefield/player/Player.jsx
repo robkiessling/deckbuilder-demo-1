@@ -10,6 +10,7 @@ export default function Player() {
       <div className={'player'}>
         <span className={'name'}>Player</span>
         <span>HP: {player.health.current} / {player.health.max}</span>
+        <span>Block: {player.block.current}</span>
       </div>
     </div>
   )
