@@ -2,6 +2,7 @@
 import {useGameDispatch, useGameState} from "../../../game/GameContext.js";
 import './Player.scss'
 import FloatingText from "../../ui/floating_text/FloatingText.jsx";
+import EquipmentArea from "../../equipment_area/EquipmentArea.jsx";
 
 export default function Player() {
   const player = useGameState().player;
@@ -21,6 +22,7 @@ export default function Player() {
         <span>HP: {player.health.current} / {player.health.max}</span>
         <span>Block: {player.block.current}</span>
       </div>
+      <EquipmentArea />
     </div>
   )
 }

@@ -13,11 +13,6 @@
     padding: 1rem;
     border-radius: 5px;
 
-    border: 1px solid transparent;
-    &.card-hover {
-      border: 1px solid white;
-    }
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,7 +22,7 @@
     }
 
     // attack animation
-    transition: all 0.25s;
+    transition: margin-right 0.25s;
     &.attack-animation {
       margin-right: 2rem;
     }

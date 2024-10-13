@@ -1,4 +1,4 @@
-import {DragTypes} from "../constants.js";
+import {CardTypes, DragTypes, EffectTypes, Mods} from "../constants.js";
 
 export const enemyTemplates = {
   goblin: {
@@ -22,21 +22,40 @@ export const enemyTemplates = {
 }
 
 export const cardTemplates = {
+  blaster: {
+    name: 'Blaster',
+    cardType: CardTypes.EQUIPMENT,
+    dragType: DragTypes.EQUIPMENT,
+    equippedDragType: DragTypes.ENEMY, // drag type once it is equipped
+    description: 'Deal 6 damage',
+    // mods: [Mods.RANGED],
+    effect: EffectTypes.SINGLE_TARGET,
+    damage: 6,
+    energy: 1,
+    charges: {
+      current: 3,
+      max: 3,
+    },
+    usedThisTurn: false
+  },
+
   attack: {
-    name: 'Attack',
+    name: 'Quick Shot',
+    cardType: CardTypes.ABILITY,
+    dragType: DragTypes.ENEMY,
+    effect: EffectTypes.SINGLE_TARGET,
     description: 'Deal 6 damage',
     energy: 1,
     damage: 6,
-    effect: 'singleTarget',
-    dragType: DragTypes.ENEMY
   },
   block: {
     name: 'Block',
+    cardType: CardTypes.ABILITY,
+    dragType: DragTypes.NO_TARGET,
+    effect: EffectTypes.NO_TARGET,
     description: 'Gain 5 block',
     energy: 1,
     block: 5,
-    effect: 'noTarget',
-    dragType: DragTypes.NO_TARGET
   }
 }
 
@@ -58,15 +77,13 @@ export const enemyEffects = {
 }
 
 export const cardEffects = {
-  noTarget: (draft, card, player) => {
-    player.energy.current -= card.energy;
+  [EffectTypes.NO_TARGET]: (draft, card, player) => {
     if (card.block) {
       player.block.current += card.block;
       player.floatingText.push({ type: 'gain-block', text: `+${card.block} Block` })
     }
   },
-  singleTarget: (draft, card, player, target) => {
-    player.energy.current -= card.energy;
+  [EffectTypes.SINGLE_TARGET]: (draft, card, player, target) => {
     if (card.damage) {
       target.health.current -= card.damage;
       target.floatingText.push({ type: 'damage', text: `-${card.damage}` })

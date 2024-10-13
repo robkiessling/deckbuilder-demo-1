@@ -34,21 +34,24 @@ const initialState = {
   handIds: [],
   deckIds: [],
   discardIds: [],
-  equipmentIds: []
+  equipmentIds: [],
+  maxEquipmentSlots: 4
 }
 
 createEnemy(initialState, 'goblin');
 createEnemy(initialState, 'hamster');
 createCardInDeck(initialState, 'attack');
-createCardInDeck(initialState, 'attack');
+createCardInDeck(initialState, 'blaster');
+createCardInDeck(initialState, 'blaster');
 createCardInDeck(initialState, 'block');
-createCardInDeck(initialState, 'attack');
-createCardInDeck(initialState, 'attack');
-createCardInDeck(initialState, 'block');
-createCardInDeck(initialState, 'attack');
-createCardInDeck(initialState, 'attack');
-createCardInDeck(initialState, 'block');
+// createCardInDeck(initialState, 'attack');
+// createCardInDeck(initialState, 'attack');
+// createCardInDeck(initialState, 'block');
+// createCardInDeck(initialState, 'attack');
+// createCardInDeck(initialState, 'attack');
+// createCardInDeck(initialState, 'block');
 shuffleDeck(initialState);
+drawCard(initialState);
 drawCard(initialState);
 drawCard(initialState);
 drawCard(initialState);
@@ -90,10 +93,27 @@ function drawCard(state) {
     state.handIds.push(state.deckIds.shift());
   }
 }
-function discardCard(state, discardId) {
-  if (state.handIds.indexOf(discardId) !== -1) {
-    state.handIds = state.handIds.filter(cardId => discardId !== cardId)
-    state.discardIds.push(discardId);
+function discardCard(state, cardId) {
+  if (state.handIds.indexOf(cardId) !== -1) {
+    state.handIds = state.handIds.filter(handId => cardId !== handId)
+    state.discardIds.push(cardId);
+  }
+}
+function equipCardFromHand(state, slotIndex, cardId) {
+  if (state.handIds.indexOf(cardId) !== -1) {
+    state.handIds = state.handIds.filter(handId => cardId !== handId)
+    state.equipmentIds[slotIndex] = cardId;
+  }
+}
+function activateEquipment(state, cardId) {
+  const card = state.cardsById[cardId];
+  if (card.charges.current > 0) {
+    card.charges.current -= 1
+    card.usedThisTurn = true
+
+    if (card.charges.current === 0) {
+      // todo delete equipment?
+    }
   }
 }
 
@@ -115,14 +135,19 @@ function gameReducer(draft, action) {
       shuffleDeck(draft);
       break;
     }
-    case 'drawCard': {
-
+    case 'equipCard': {
+      const card = draft.cardsById[action.cardId];
+      draft.player.energy.current -= card.energy;
+      equipCardFromHand(draft, action.slotIndex, action.cardId);
       break;
     }
     case 'startPlayerTurn': {
       draft.isPlayerTurn = true;
       draft.player.energy.current = draft.player.energy.max;
       draft.player.block.current = 0;
+      for (const card of Object.values(draft.cardsById)) {
+        card.usedThisTurn = false;
+      }
       drawCard(draft);
       break;
     }
@@ -146,6 +171,7 @@ function gameReducer(draft, action) {
     }
     case 'useCardNoTarget': {
       const card = draft.cardsById[action.cardId];
+      draft.player.energy.current -= card.energy;
       const effect = cardEffects[card.effect];
       effect(draft, card, draft.player)
       discardCard(draft, action.cardId);
@@ -153,9 +179,17 @@ function gameReducer(draft, action) {
     }
     case 'useCardOnEnemy': {
       const card = draft.cardsById[action.cardId];
+      draft.player.energy.current -= card.energy;
       const effect = cardEffects[card.effect]
       effect(draft, card, draft.player, draft.enemiesById[action.enemyId])
       discardCard(draft, action.cardId);
+      break;
+    }
+    case 'useEquipmentOnEnemy': {
+      const card = draft.cardsById[action.cardId];
+      const effect = cardEffects[card.effect]
+      effect(draft, card, draft.player, draft.enemiesById[action.enemyId])
+      activateEquipment(draft, action.cardId);
       break;
     }
     case 'clearPlayerFloatingText': {

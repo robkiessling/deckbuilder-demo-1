@@ -10,19 +10,20 @@ export default function Enemy({enemyId}) {
   const enemy = useGameState().enemiesById[enemyId];
   const dispatch = useGameDispatch();
 
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: DragTypes.ENEMY,
     drop: (item) => {
       dispatch({
-        type: 'useCardOnEnemy',
+        type: item.equipment ? 'useEquipmentOnEnemy' : 'useCardOnEnemy',
         enemyId: enemyId,
         cardId: item.cardId
       })
     },
     collect: monitor => ({
       isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop()
     }),
-  }), [enemyId])
+  }), [])
 
   const [attackAnimation, setAttackAnimation] = useState(false);
   useEffect(() => {
@@ -46,9 +47,11 @@ export default function Enemy({enemyId}) {
     })
   }
 
+  const dropClasses = `drop-target ${isOver ? 'is-over' : ''} ${canDrop ? 'can-drop' : ''}`
+
   return (
     <div className={`enemy-frame`}>
-      <div className={`enemy ${isOver ? 'card-hover' : ''} ${attackAnimation ? 'attack-animation' : ''}`} ref={drop}>
+      <div className={`enemy ${attackAnimation ? 'attack-animation' : ''} ${dropClasses}`} ref={drop}>
         <FloatingText floatingText={enemy.floatingText} clearText={clearFloatingText} />
         <span className={'name'}>{enemy.name}</span>
         <span>HP: {enemy.health.current} / {enemy.health.max}</span>

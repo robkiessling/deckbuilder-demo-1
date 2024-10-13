@@ -1,0 +1,14 @@
+
+.equipment-area {
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: center;
+
+  width: 14rem;
+  height: 17rem;
+  gap: 1rem;
+
+}

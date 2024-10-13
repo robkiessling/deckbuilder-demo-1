@@ -48,7 +48,7 @@ export default function Battlefield() {
   }, [state.isPlayerTurn])
 
 
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: DragTypes.NO_TARGET,
     drop: (item) => {
       dispatch({
@@ -58,12 +58,14 @@ export default function Battlefield() {
     },
     collect: monitor => ({
       isOver: !!monitor.isOver(),
+      canDrop: !!monitor.canDrop(),
     }),
   }), [])
 
+  const dropClasses = `drop-target ${isOver ? 'is-over' : ''} ${canDrop ? 'can-drop' : ''}`
 
   return (
-    <div className={`battlefield ${isOver ? 'card-hover' : ''}`} ref={drop}>
+    <div className={`battlefield ${dropClasses}`} ref={drop}>
       <div className={'current-turn-container'}>
         <span className={`current-turn ${flashCurrentTurn ? 'flash' : ''}`}>
           {state.isPlayerTurn ? 'Player Turn' : 'Enemy Turn'}

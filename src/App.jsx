@@ -1,4 +1,4 @@
-import './App.css'
+import './App.scss'
 import {GameProvider} from "./game/GameProvider.jsx";
 
 import { DndProvider } from 'react-dnd'

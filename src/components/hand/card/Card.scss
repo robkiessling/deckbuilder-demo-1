@@ -28,7 +28,13 @@
 
   .name {
     font-weight: bold;
-    padding: 0.5rem 0;
+    //padding: 0.5rem 0;
+    padding-top: 0.5rem;
+  }
+
+  .type {
+    font-style: italic;
+    padding-bottom: 0.5rem;
   }
 
   .energy {

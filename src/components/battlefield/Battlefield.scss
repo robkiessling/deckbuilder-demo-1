@@ -9,11 +9,6 @@
   align-items: flex-start;
 
   box-sizing: border-box;
-  border: 1px solid transparent;
-  &.card-hover {
-    border: 1px solid white;
-  }
-
 
   .current-turn-container {
     position: absolute;

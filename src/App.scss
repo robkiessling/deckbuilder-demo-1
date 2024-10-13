@@ -44,3 +44,17 @@
 /*.read-the-docs {*/
 /*  color: #888;*/
 /*}*/
+
+
+.drop-target {
+  border: 2px solid transparent;
+
+  &.can-drop {
+    //border: 2px dashed white;
+    box-shadow: 0 0 5px rgba(26, 255, 0, 0.82), 0 0 15px rgba(55, 255, 10, 0.4);
+  }
+
+  &.is-over {
+    border: 2px solid #00ff02;
+  }
+}
