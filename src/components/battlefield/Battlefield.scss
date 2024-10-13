@@ -1,8 +1,15 @@
 .battlefield {
-  height: 80%;
+  height: 100%;
   width: 100%;
+  //padding-bottom: 15rem;
 
   display: flex;
   justify-content: center;
   align-items: flex-start;
+
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  &.card-hover {
+    border: 1px solid white;
+  }
 }

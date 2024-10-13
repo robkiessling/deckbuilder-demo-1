@@ -1,5 +1,5 @@
 import './App.css'
-import {GameProvider} from "./contexts/GameProvider.jsx";
+import {GameProvider} from "./game/GameProvider.jsx";
 
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'

@@ -3,8 +3,20 @@
   height: 10rem;
   width: 10rem;
   background: red;
+  padding: 1rem;
 
+  //box-sizing: border-box;
+  border: 1px solid transparent;
   &.card-hover {
     border: 1px solid white;
   }
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .name {
+    font-weight: bold;
+  }
+
 }

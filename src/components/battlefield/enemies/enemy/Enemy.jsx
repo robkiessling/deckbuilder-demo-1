@@ -2,7 +2,7 @@
 import { useDrop } from 'react-dnd'
 import './Enemy.scss';
 import {DragTypes} from "../../../../constants.js";
-import {useGameDispatch, useGameState} from "../../../../contexts/GameContext.js";
+import {useGameDispatch, useGameState} from "../../../../game/GameContext.js";
 
 export default function Enemy({enemyId}) {
   const enemy = useGameState().enemiesById[enemyId];
@@ -10,7 +10,7 @@ export default function Enemy({enemyId}) {
   const dispatch = useGameDispatch();
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: DragTypes.CARD,
+    accept: DragTypes.ENEMY,
     drop: (item) => {
       dispatch({
         type: 'useCardOnEnemy',
@@ -25,7 +25,7 @@ export default function Enemy({enemyId}) {
 
   return (
     <div className={`enemy ${isOver ? 'card-hover' : ''}`} ref={drop}>
-      <span>{enemy.type}</span><br/>
+      <span className={'name'}>{enemy.name}</span>
       <span>HP: {enemy.health.current} / {enemy.health.max}</span>
     </div>
   )

@@ -1,5 +1,5 @@
 
-import {useGameState} from "../../../contexts/GameContext.js";
+import {useGameState} from "../../../game/GameContext.js";
 import './Player.scss'
 
 export default function Player() {
@@ -8,7 +8,7 @@ export default function Player() {
   return (
     <div className={'player-side'}>
       <div className={'player'}>
-        <span>Player</span><br/>
+        <span className={'name'}>Player</span>
         <span>HP: {player.health.current} / {player.health.max}</span>
       </div>
     </div>

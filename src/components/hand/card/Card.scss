@@ -4,11 +4,30 @@
 
   height: 10rem;
   width: 8rem;
+  border-radius: 5px;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
+  font-size: 0.875rem;
 
   &.is-dragging {
-    border: 3px solid white;
+    //border: 3px solid white;
   }
+
+  border: 1px solid transparent;
+
+  &:hover {
+    height: 11rem;
+    width: 8.8rem;
+    margin-top: -1rem;
+    font-size: 1rem;
+    border: 1px solid white;
+  }
+
+  .name {
+    font-weight: bold;
+    padding: 0.5rem 0;
+  }
+
 }

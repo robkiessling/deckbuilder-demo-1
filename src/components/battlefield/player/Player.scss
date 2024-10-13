@@ -1,7 +1,7 @@
 
 .player-side {
   flex: 1 1 0;
-  height: 100%;
+  height: 80%;
 
   //background: blue;
 
@@ -14,5 +14,15 @@
     height: 10rem;
     width: 10rem;
     background: blue;
+
+    padding: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .name {
+      font-weight: bold;
+    }
   }
 }

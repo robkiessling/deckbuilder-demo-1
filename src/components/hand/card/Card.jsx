@@ -1,14 +1,13 @@
 
 import './Card.scss';
 import { useDrag } from 'react-dnd'
-import {DragTypes} from "../../../constants.js";
-import {useGameState} from "../../../contexts/GameContext.js";
+import {useGameState} from "../../../game/GameContext.js";
 
 export default function Card({cardId}) {
   const card = useGameState().cardsById[cardId];
 
   const [{isDragging}, drag] = useDrag(() => ({
-    type: DragTypes.CARD,
+    type: card.dragType,
     item: () => ({
       cardId: card.id
     }),
@@ -19,8 +18,8 @@ export default function Card({cardId}) {
 
   return (
     <div ref={drag} className={`card ${isDragging ? 'is-dragging' : ''}`}>
-      <span>{card.name}</span>
-      <span>{card.description}</span>
+      <span className={'name'}>{card.name}</span>
+      <span className={'description'}>{card.description}</span>
     </div>
   )
 }

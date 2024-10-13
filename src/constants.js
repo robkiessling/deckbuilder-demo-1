@@ -1,6 +1,5 @@
 
-
-
 export const DragTypes = {
-  CARD: 'card'
+  ENEMY: 'enemy',
+  NO_TARGET: 'noTarget'
 }
