@@ -15,14 +15,35 @@
   }
 
 
-  .current-turn {
+  .current-turn-container {
     position: absolute;
     top: 1rem;
     left: 50%;
     transform: translateX(-50%);
 
-    letter-spacing: 2px;
-    font-size: 1.5rem;
-    border-bottom: 1px solid white;
+    .current-turn {
+      letter-spacing: 2px;
+      font-size: 1.5rem;
+      border-bottom: 1px solid white;
+      display: inline-block;
+
+      /* Class to apply the animation */
+      &.flash {
+        animation: flashText 0.5s ease-in-out; /* Adjust duration as needed */
+      }
+    }
+  }
+}
+
+/* Keyframe animation to flash the text */
+@keyframes flashText {
+  0% {
+    transform: scale(1);  /* Normal size */
+  }
+  50% {
+    transform: scale(1.5); /* Bigger size */
+  }
+  100% {
+    transform: scale(1);  /* Back to normal size */
   }
 }

@@ -46,10 +46,12 @@ export const enemyEffects = {
     if (player.block.current < remainingDamage) {
       remainingDamage -= player.block.current;
       player.block.current = 0;
+      player.floatingText.push({ type: 'damage', text: `-${remainingDamage}` })
     }
     else {
       player.block.current -= remainingDamage;
       remainingDamage = 0;
+      player.floatingText.push({ type: 'blocked-all', text: `Blocked` })
     }
     player.health.current -= remainingDamage;
   }
@@ -60,12 +62,14 @@ export const cardEffects = {
     player.energy.current -= card.energy;
     if (card.block) {
       player.block.current += card.block;
+      player.floatingText.push({ type: 'gain-block', text: `+${card.block} Block` })
     }
   },
   singleTarget: (draft, card, player, target) => {
     player.energy.current -= card.energy;
     if (card.damage) {
       target.health.current -= card.damage;
+      target.floatingText.push({ type: 'damage', text: `-${card.damage}` })
     }
   }
 }

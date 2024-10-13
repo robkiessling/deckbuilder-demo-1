@@ -1,0 +1,37 @@
+
+.floating-text {
+  position: absolute;
+  top: -40px;  /* Adjust to position the damage number above the enemy */
+  left: 50%; // note: will be overridden manually (each number gets random left offset)
+  transform: translate(-50%, 0);
+  font-size: 24px;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; /* Smooth fade and move */
+  opacity: 1;
+  white-space: pre;
+
+  /* Animation for fading out */
+  &.fade-out {
+    opacity: 0;
+    transform: translate(-50%, -20px); /* Move upwards as it fades */
+    animation: fadeout-and-up 2s forwards; /* 2s fade-out animation */
+  }
+
+  color: white;
+  &.damage {
+    color: red;
+  }
+  &.gain-block {
+    color: #4b4bff;
+  }
+}
+
+@keyframes fadeout-and-up {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -20px); /* Move the text upwards */
+  }
+}

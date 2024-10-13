@@ -1,8 +1,9 @@
 
 import './EndTurn.scss'
-import {useGameDispatch} from "../../game/GameContext.js";
+import {useGameDispatch, useGameState} from "../../game/GameContext.js";
 
 export default function EndTurn() {
+  const state = useGameState();
   const dispatch = useGameDispatch();
 
   function endTurn() {
@@ -13,7 +14,7 @@ export default function EndTurn() {
 
   return (
     <div className={'end-turn'}>
-      <button onClick={endTurn}>End Turn</button>
+      <button onClick={endTurn} disabled={!state.isPlayerTurn}>End Turn</button>
     </div>
   )
 }

@@ -3,28 +3,28 @@ import { useDrop } from 'react-dnd'
 import './Enemy.scss';
 import {DragTypes} from "../../../../constants.js";
 import {useGameDispatch, useGameState} from "../../../../game/GameContext.js";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
+import FloatingText from "../../../ui/floating_text/FloatingText.jsx";
 
 export default function Enemy({enemyId}) {
   const enemy = useGameState().enemiesById[enemyId];
   const dispatch = useGameDispatch();
-  const enemyDiv = useRef(null);
-  const [attackAnimation, setAttackAnimation] = useState(false);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: DragTypes.ENEMY,
     drop: (item) => {
       dispatch({
         type: 'useCardOnEnemy',
-        enemyId: enemy.id,
+        enemyId: enemyId,
         cardId: item.cardId
       })
     },
     collect: monitor => ({
       isOver: !!monitor.isOver(),
     }),
-  }), [enemy.id])
+  }), [enemyId])
 
+  const [attackAnimation, setAttackAnimation] = useState(false);
   useEffect(() => {
     // If enemy has performed its action, show a brief animation
     if (enemy.performedAction) {
@@ -39,9 +39,17 @@ export default function Enemy({enemyId}) {
     }
   }, [enemy.performedAction]);
 
+  function clearFloatingText() {
+    dispatch({
+      type: 'clearEnemyFloatingText',
+      enemyId: enemyId
+    })
+  }
+
   return (
     <div className={`enemy-frame ${isOver ? 'card-hover' : ''}`} ref={drop}>
-      <div className={`enemy ${attackAnimation ? 'attack-animation' : ''}`} ref={enemyDiv}>
+      <div className={`enemy ${attackAnimation ? 'attack-animation' : ''}`}>
+        <FloatingText floatingText={enemy.floatingText} clearText={clearFloatingText} />
         <span className={'name'}>{enemy.name}</span>
         <span>HP: {enemy.health.current} / {enemy.health.max}</span>
         <span>ATK: {enemy.attack}</span>

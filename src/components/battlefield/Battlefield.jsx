@@ -5,11 +5,12 @@ import Enemies from "./enemies/Enemies.jsx";
 import {useDrop} from "react-dnd";
 import {DragTypes} from "../../constants.js";
 import {useGameDispatch, useGameState} from "../../game/GameContext.js";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 export default function Battlefield() {
   const state = useGameState();
   const dispatch = useGameDispatch();
+  const [flashCurrentTurn, setFlashCurrentTurn] = useState(false);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -33,6 +34,19 @@ export default function Battlefield() {
     return () => clearInterval(intervalId);
   }, [state.isPlayerTurn, state.enemiesById, dispatch]);
 
+  useEffect(() => {
+    setFlashCurrentTurn(true);
+
+    const timeoutId = setTimeout(() => {
+      setFlashCurrentTurn(false);
+    }, 500)
+
+    return () => {
+      setFlashCurrentTurn(false);
+      clearTimeout(timeoutId);
+    };
+  }, [state.isPlayerTurn])
+
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: DragTypes.NO_TARGET,
@@ -50,7 +64,11 @@ export default function Battlefield() {
 
   return (
     <div className={`battlefield ${isOver ? 'card-hover' : ''}`} ref={drop}>
-      <span className={'current-turn'}>{state.isPlayerTurn ? 'Player Turn' : 'Enemy Turn'}</span>
+      <div className={'current-turn-container'}>
+        <span className={`current-turn ${flashCurrentTurn ? 'flash' : ''}`}>
+          {state.isPlayerTurn ? 'Player Turn' : 'Enemy Turn'}
+        </span>
+      </div>
       <Player/>
       <Enemies/>
     </div>

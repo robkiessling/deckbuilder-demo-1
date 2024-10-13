@@ -22,7 +22,8 @@ const initialState = {
     energy: {
       current: 3,
       max: 3,
-    }
+    },
+    floatingText: []
   },
 
   enemiesById: {},
@@ -46,6 +47,7 @@ function createEnemy(state, template) {
     draft.id = id++;
     draft.template = template;
     draft.performedAction = false;
+    draft.floatingText = []
   });
 
   state.enemiesById[enemy.id] = enemy;
@@ -105,6 +107,14 @@ function gameReducer(draft, action) {
       const card = draft.cardsById[action.cardId];
       const effect = cardEffects[card.effect]
       effect(draft, card, draft.player, draft.enemiesById[action.enemyId])
+      break;
+    }
+    case 'clearPlayerFloatingText': {
+      draft.player.floatingText = []
+      break;
+    }
+    case 'clearEnemyFloatingText': {
+      draft.enemiesById[action.enemyId].floatingText = []
       break;
     }
     default: {
