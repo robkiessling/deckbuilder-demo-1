@@ -12,12 +12,6 @@
   align-items: center;
   font-size: 0.875rem;
 
-  &.is-dragging {
-    //border: 3px solid white;
-  }
-
-  border: 2px solid transparent;
-
   &:hover {
     height: 11rem;
     width: 8.8rem;
@@ -54,14 +48,12 @@
     border: 1px solid #777;
   }
 
-  &.sufficient {
+  border: 2px solid transparent;
+
+  &.can-use {
     border: 2px solid #75ff75;
   }
   &.insufficient {
-    //&:hover {
-    //  border: 1px solid red;
-    //}
-
     .energy {
       color: #ff1e1e;
     }

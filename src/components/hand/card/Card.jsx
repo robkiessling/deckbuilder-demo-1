@@ -8,6 +8,7 @@ export default function Card({cardId}) {
   const state = useGameState();
   const card = state.cardsById[cardId];
   const enoughEnergy = state.player.energy.current >= card.energy;
+  const canUse = state.isPlayerTurn && !state.player.isDead && enoughEnergy;
 
   const [{isDragging}, drag] = useDrag(() => ({
     type: card.dragType,
@@ -15,12 +16,12 @@ export default function Card({cardId}) {
       cardId: card.id
     }),
     canDrag: () => {
-      return enoughEnergy
+      return canUse
     },
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
-  }), [enoughEnergy])
+  }), [canUse])
 
   let cardType;
   switch(card.cardType) {
@@ -32,8 +33,11 @@ export default function Card({cardId}) {
       break;
   }
 
+  const cardClass = `card ${isDragging ? 'is-dragging' : ''} ${canUse ? 'can-use' : 'cannot-use'} ` +
+    `${enoughEnergy ? 'sufficient' : 'insufficient'}`
+
   return (
-    <div ref={drag} className={`card ${isDragging ? 'is-dragging' : ''} ${enoughEnergy ? 'sufficient' : 'insufficient'}`}>
+    <div ref={drag} className={cardClass}>
       <span className={`energy`}>{card.energy}</span>
       <span className={'name'}>{card.name}</span>
       <span className={'type'}>{cardType}</span>

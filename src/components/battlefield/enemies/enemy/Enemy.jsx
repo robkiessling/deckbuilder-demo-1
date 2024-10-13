@@ -12,6 +12,9 @@ export default function Enemy({enemyId}) {
 
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: DragTypes.ENEMY,
+    canDrop: () => {
+      return !enemy.isDead
+    },
     drop: (item) => {
       dispatch({
         type: item.equipment ? 'useEquipmentOnEnemy' : 'useCardOnEnemy',
@@ -19,11 +22,13 @@ export default function Enemy({enemyId}) {
         cardId: item.cardId
       })
     },
-    collect: monitor => ({
-      isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop()
-    }),
-  }), [])
+    collect: monitor => {
+      return {
+        isOver: !!monitor.isOver(),
+        canDrop: !!monitor.canDrop()
+      };
+    }
+  }), [enemy.isDead])
 
   const [attackAnimation, setAttackAnimation] = useState(false);
   useEffect(() => {
@@ -47,11 +52,12 @@ export default function Enemy({enemyId}) {
     })
   }
 
-  const dropClasses = `drop-target ${isOver ? 'is-over' : ''} ${canDrop ? 'can-drop' : ''}`
+  const dropClasses = `drop-target ${isOver && canDrop ? 'is-over' : ''} ${canDrop ? 'can-drop' : ''}`
 
   return (
     <div className={`enemy-frame`}>
-      <div className={`enemy ${attackAnimation ? 'attack-animation' : ''} ${dropClasses}`} ref={drop}>
+      <div className={`enemy ${attackAnimation ? 'attack-animation' : ''} ${dropClasses} ${enemy.isDead ? 'is-dead' : ''}`}
+           ref={drop}>
         <FloatingText floatingText={enemy.floatingText} clearText={clearFloatingText} />
         <span className={'name'}>{enemy.name}</span>
         <span>HP: {enemy.health.current} / {enemy.health.max}</span>

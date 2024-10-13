@@ -16,7 +16,7 @@ export default function Player() {
 
   return (
     <div className={'player-side'}>
-      <div className={'player'}>
+      <div className={`player ${player.isDead ? 'is-dead' : ''}`}>
         <FloatingText floatingText={player.floatingText} clearText={clearFloatingText} />
         <span className={'name'}>Player</span>
         <span>HP: {player.health.current} / {player.health.max}</span>

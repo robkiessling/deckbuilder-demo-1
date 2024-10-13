@@ -27,7 +27,7 @@ export default function EquipmentSlot({slotIndex}) {
   }), [])
 
   return (
-    <div className={`equipment-slot drop-target ${isOver ? 'is-over' : ''} ${canDrop ? 'can-drop' : ''}`} ref={drop}>
+    <div className={`equipment-slot drop-target ${isOver && canDrop ? 'is-over' : ''} ${canDrop ? 'can-drop' : ''}`} ref={drop}>
       { equipmentId && <EquippedItem cardId={equipmentId} /> }
     </div>
   )

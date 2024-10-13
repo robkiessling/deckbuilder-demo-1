@@ -26,6 +26,10 @@
     &.attack-animation {
       margin-right: 2rem;
     }
+
+    &.is-dead {
+      background: #690000;
+    }
   }
 
 }

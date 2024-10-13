@@ -28,6 +28,21 @@
       }
     }
   }
+
+  .game-over {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    font-size: 4rem;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.58);
+    display: flex;
+    justify-content: center;
+    > div {
+      padding-top: 5rem;
+    }
+  }
 }
 
 /* Keyframe animation to flash the text */

@@ -13,8 +13,8 @@ const initialState = {
 
   player: {
     health: {
-      current: 33,
-      max: 50
+      current: 80,
+      max: 80
     },
     block: {
       current: 0,
@@ -41,8 +41,13 @@ const initialState = {
 createEnemy(initialState, 'goblin');
 createEnemy(initialState, 'hamster');
 createCardInDeck(initialState, 'attack');
+createCardInDeck(initialState, 'attack');
+// createCardInDeck(initialState, 'attack');
+// createCardInDeck(initialState, 'attack');
+// createCardInDeck(initialState, 'attack');
+// createCardInDeck(initialState, 'attack');
 createCardInDeck(initialState, 'blaster');
-createCardInDeck(initialState, 'blaster');
+// createCardInDeck(initialState, 'blaster');
 createCardInDeck(initialState, 'block');
 // createCardInDeck(initialState, 'attack');
 // createCardInDeck(initialState, 'attack');
@@ -161,7 +166,7 @@ function gameReducer(draft, action) {
     case 'nextEnemyAction': {
       for (let i = 0; i < draft.enemyIds.length; i++) {
         const enemy = draft.enemiesById[draft.enemyIds[i]];
-        if (!enemy.performedAction) {
+        if (!enemy.isDead && !enemy.performedAction) {
           enemyEffects.attack(draft, draft.player, enemy);
           enemy.performedAction = true;
           break;

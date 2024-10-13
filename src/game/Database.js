@@ -73,6 +73,11 @@ export const enemyEffects = {
       player.floatingText.push({ type: 'blocked-all', text: `Blocked` })
     }
     player.health.current -= remainingDamage;
+
+    if (player.health.current <= 0) {
+      player.health.current = 0;
+      player.isDead = true;
+    }
   }
 }
 
@@ -87,6 +92,11 @@ export const cardEffects = {
     if (card.damage) {
       target.health.current -= card.damage;
       target.floatingText.push({ type: 'damage', text: `-${card.damage}` })
+
+      if (target.health.current <= 0) {
+        target.health.current = 0;
+        target.isDead = true;
+      }
     }
   }
 }

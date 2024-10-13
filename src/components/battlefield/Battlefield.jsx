@@ -16,7 +16,8 @@ export default function Battlefield() {
     const intervalId = setInterval(() => {
       if (!state.isPlayerTurn) {
         if (state.enemyIds.every(enemyId => {
-          return state.enemiesById[enemyId].performedAction
+          const enemy = state.enemiesById[enemyId]
+          return enemy.isDead || enemy.performedAction
         })) {
           dispatch({
             type: 'startPlayerTurn'
@@ -32,7 +33,7 @@ export default function Battlefield() {
 
     // Cleanup function to clear the timeout if the component unmounts
     return () => clearInterval(intervalId);
-  }, [state.isPlayerTurn, state.enemiesById, dispatch]);
+  }, [state.isPlayerTurn, state.enemiesById, dispatch, state.enemyIds]);
 
   useEffect(() => {
     setFlashCurrentTurn(true);
@@ -62,7 +63,11 @@ export default function Battlefield() {
     }),
   }), [])
 
-  const dropClasses = `drop-target ${isOver ? 'is-over' : ''} ${canDrop ? 'can-drop' : ''}`
+  const dropClasses = `drop-target ${isOver && canDrop ? 'is-over' : ''} ${canDrop ? 'can-drop' : ''}`
+
+  const allEnemiesDead = state.enemyIds.every(enemyId => {
+    return state.enemiesById[enemyId].isDead
+  })
 
   return (
     <div className={`battlefield ${dropClasses}`} ref={drop}>
@@ -71,6 +76,8 @@ export default function Battlefield() {
           {state.isPlayerTurn ? 'Player Turn' : 'Enemy Turn'}
         </span>
       </div>
+      { state.player.isDead && <div className={'game-over'}><div>You have died!</div></div> }
+      { allEnemiesDead && <div className={'game-over'}><div>You are victorious!</div></div> }
       <Player/>
       <Enemies/>
     </div>

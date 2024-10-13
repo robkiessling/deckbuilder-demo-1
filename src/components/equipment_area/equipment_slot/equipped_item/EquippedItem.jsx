@@ -6,7 +6,7 @@ import {useGameState} from "../../../../game/GameContext.js";
 export default function EquippedItem({ cardId }) {
   const state = useGameState();
   const card = state.cardsById[cardId];
-  const canUse = card.charges.current > 0 && !card.usedThisTurn && state.isPlayerTurn;
+  const canUse = card.charges.current > 0 && !card.usedThisTurn && state.isPlayerTurn && !state.player.isDead;
 
   const [{isDragging}, drag] = useDrag(() => ({
     type: card.equippedDragType,
