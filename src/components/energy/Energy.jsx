@@ -8,7 +8,8 @@ export default function Energy() {
 
   return (
     <div className={'energy-orb'}>
-      {player.energy.current} / {player.energy.max}
+      <span className={'label'}>Energy:</span>
+      <span className={'amount'}>{player.energy.current} / {player.energy.max}</span>
     </div>
   )
 }

@@ -47,8 +47,8 @@ export default function Enemy({enemyId}) {
   }
 
   return (
-    <div className={`enemy-frame ${isOver ? 'card-hover' : ''}`} ref={drop}>
-      <div className={`enemy ${attackAnimation ? 'attack-animation' : ''}`}>
+    <div className={`enemy-frame`}>
+      <div className={`enemy ${isOver ? 'card-hover' : ''} ${attackAnimation ? 'attack-animation' : ''}`} ref={drop}>
         <FloatingText floatingText={enemy.floatingText} clearText={clearFloatingText} />
         <span className={'name'}>{enemy.name}</span>
         <span>HP: {enemy.health.current} / {enemy.health.max}</span>

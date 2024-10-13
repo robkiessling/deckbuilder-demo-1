@@ -4,6 +4,7 @@ import { produce } from "immer";
 import {GameContext, GameDispatchContext} from './GameContext.js'
 import {current} from "immer";
 import {cardTemplates, cardEffects, enemyTemplates, enemyEffects} from "./Database.js";
+import {shuffleArray} from "../helpers.js";
 
 let id = 1;
 
@@ -38,9 +39,19 @@ const initialState = {
 
 createEnemy(initialState, 'goblin');
 createEnemy(initialState, 'hamster');
-createCardInHand(initialState, 'attack');
-createCardInHand(initialState, 'attack');
-createCardInHand(initialState, 'block');
+createCardInDeck(initialState, 'attack');
+createCardInDeck(initialState, 'attack');
+createCardInDeck(initialState, 'block');
+createCardInDeck(initialState, 'attack');
+createCardInDeck(initialState, 'attack');
+createCardInDeck(initialState, 'block');
+createCardInDeck(initialState, 'attack');
+createCardInDeck(initialState, 'attack');
+createCardInDeck(initialState, 'block');
+shuffleDeck(initialState);
+drawCard(initialState);
+drawCard(initialState);
+drawCard(initialState);
 
 function createEnemy(state, template) {
   const enemy = produce(enemyTemplates[template], draft => {
@@ -62,6 +73,29 @@ function createCardInHand(state, template) {
   state.cardsById[card.id] = card;
   state.handIds.push(card.id);
 }
+function createCardInDeck(state, template) {
+  const card = produce(cardTemplates[template], draft => {
+    draft.id = id++;
+    draft.template = template;
+  })
+
+  state.cardsById[card.id] = card;
+  state.deckIds.push(card.id);
+}
+function shuffleDeck(state) {
+  shuffleArray(state.deckIds);
+}
+function drawCard(state) {
+  if (state.deckIds.length) {
+    state.handIds.push(state.deckIds.shift());
+  }
+}
+function discardCard(state, discardId) {
+  if (state.handIds.indexOf(discardId) !== -1) {
+    state.handIds = state.handIds.filter(cardId => discardId !== cardId)
+    state.discardIds.push(discardId);
+  }
+}
 
 function gameReducer(draft, action) {
   switch (action.type) {
@@ -73,10 +107,23 @@ function gameReducer(draft, action) {
       createCardInHand(draft, action.template);
       break;
     }
+    case 'createCardInDeck': {
+      createCardInDeck(draft, action.template);
+      break;
+    }
+    case 'shuffleDeck': {
+      shuffleDeck(draft);
+      break;
+    }
+    case 'drawCard': {
+
+      break;
+    }
     case 'startPlayerTurn': {
       draft.isPlayerTurn = true;
       draft.player.energy.current = draft.player.energy.max;
       draft.player.block.current = 0;
+      drawCard(draft);
       break;
     }
     case 'endPlayerTurn': {
@@ -101,12 +148,14 @@ function gameReducer(draft, action) {
       const card = draft.cardsById[action.cardId];
       const effect = cardEffects[card.effect];
       effect(draft, card, draft.player)
+      discardCard(draft, action.cardId);
       break;
     }
     case 'useCardOnEnemy': {
       const card = draft.cardsById[action.cardId];
       const effect = cardEffects[card.effect]
       effect(draft, card, draft.player, draft.enemiesById[action.enemyId])
+      discardCard(draft, action.cardId);
       break;
     }
     case 'clearPlayerFloatingText': {

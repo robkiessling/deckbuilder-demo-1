@@ -8,9 +8,16 @@
   width: 8rem;
   background: green;
   display: flex;
+  flex-direction: column;
   border-radius: 8rem;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
 
+  .label {
+    font-size: 0.75rem;
+  }
+  .amount {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
 }
