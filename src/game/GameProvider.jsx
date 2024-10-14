@@ -3,10 +3,17 @@ import { produce } from "immer";
 
 import {GameContext, GameDispatchContext} from './GameContext.js'
 import {current} from "immer";
-import {cardTemplates, cardEffects, enemyTemplates, enemyEffects} from "./Database.js";
-import {shuffleArray} from "../helpers.js";
+import {cardEffects, enemyEffects} from "./Database.js";
+import {
+  activateEquipment,
+  createCardInDeck,
+  createCardInHand,
+  createEnemy, discardCard,
+  drawCard,
+  equipCardFromHand,
+  shuffleDeck
+} from "./GameMechanics.jsx";
 
-let id = 1;
 
 const MAX_STARTING_ENERGY = 5;
 const ENEMY_GAIN_ATK_PER_TURN = 2;
@@ -58,87 +65,25 @@ createCardInDeck(initialState, 'grenades');
 
 createCardInDeck(initialState, 'blaster');
 createCardInDeck(initialState, 'blaster');
+createCardInDeck(initialState, 'rifle');
 createCardInDeck(initialState, 'plasmaSword');
 createCardInDeck(initialState, 'rocketLauncher');
 createCardInDeck(initialState, 'shieldGenerator');
 createCardInDeck(initialState, 'shieldGenerator');
+createCardInDeck(initialState, 'utilityPack');
 
 shuffleDeck(initialState);
 drawCard(initialState);
 drawCard(initialState);
 drawCard(initialState);
 drawCard(initialState);
-drawCard(initialState);
+// drawCard(initialState);
 
-function createEnemy(state, template) {
-  const enemy = produce(enemyTemplates[template], draft => {
-    draft.id = id++;
-    draft.template = template;
-    draft.performedAction = false;
-    draft.floatingText = []
-  });
-
-  state.enemiesById[enemy.id] = enemy;
-  state.enemyIds.push(enemy.id);
-}
-function createCardInHand(state, template) {
-  const card = produce(cardTemplates[template], draft => {
-    draft.id = id++;
-    draft.template = template;
-  })
-
-  state.cardsById[card.id] = card;
-  state.handIds.push(card.id);
-}
-function createCardInDeck(state, template) {
-  const card = produce(cardTemplates[template], draft => {
-    draft.id = id++;
-    draft.template = template;
-  })
-
-  state.cardsById[card.id] = card;
-  state.deckIds.push(card.id);
-}
-function shuffleDeck(state) {
-  shuffleArray(state.deckIds);
-}
-function drawCard(state) {
-  if (state.deckIds.length) {
-    state.handIds.push(state.deckIds.shift());
-  }
-}
-function discardCard(state, cardId) {
-  if (state.handIds.indexOf(cardId) !== -1) {
-    state.handIds = state.handIds.filter(handId => cardId !== handId)
-    state.discardIds.push(cardId);
-  }
-}
-function equipCardFromHand(state, slotIndex, cardId) {
-  if (state.handIds.indexOf(cardId) !== -1) {
-    state.handIds = state.handIds.filter(handId => cardId !== handId)
-    state.equipmentIds[slotIndex] = cardId;
-  }
-}
-function activateEquipment(state, cardId) {
-  const card = state.cardsById[cardId];
-  if (card.charges.current > 0) {
-    card.charges.current -= 1
-    card.usedThisTurn = true
-
-    if (card.charges.current === 0) {
-      // todo delete equipment?
-    }
-  }
-}
 
 function gameReducer(draft, action) {
   switch (action.type) {
     case 'createEnemy': {
       createEnemy(draft, action.template);
-      break;
-    }
-    case 'createCardInHand': {
-      createCardInHand(draft, action.template);
       break;
     }
     case 'createCardInDeck': {

@@ -1,4 +1,7 @@
 import {CardTypes, DragTypes, EffectTypes, Mods} from "../constants.js";
+import {produce} from "immer";
+import {shuffleArray} from "../helpers.js";
+import {dealDamage, drawCard} from "./GameMechanics.jsx";
 
 export const enemyTemplates = {
   goblin: {
@@ -33,13 +36,28 @@ export const cardTemplates = {
     cardType: CardTypes.EQUIPMENT,
     dragType: DragTypes.EQUIPMENT,
     equippedDragType: DragTypes.ENEMY, // drag type once it is equipped
-    description: 'Deal 6 damage.',
+    description: 'Deal 7 damage.',
     effect: EffectTypes.SINGLE_TARGET,
-    damage: 6,
+    damage: 7,
     energy: 2,
     charges: {
       current: 3,
       max: 3,
+    },
+    usedThisTurn: false
+  },
+  rifle: {
+    name: 'Rifle',
+    cardType: CardTypes.EQUIPMENT,
+    dragType: DragTypes.EQUIPMENT,
+    equippedDragType: DragTypes.ENEMY,
+    description: 'Deal 11 damage.',
+    effect: EffectTypes.SINGLE_TARGET,
+    damage: 11,
+    energy: 2,
+    charges: {
+      current: 2,
+      max: 2
     },
     usedThisTurn: false
   },
@@ -48,9 +66,10 @@ export const cardTemplates = {
     cardType: CardTypes.EQUIPMENT,
     dragType: DragTypes.EQUIPMENT,
     equippedDragType: DragTypes.NO_TARGET,
-    description: 'Deal 15 melee damage.',
+    description: 'Deal 15 melee damage. Draw 1 card.',
     effect: EffectTypes.MELEE_TARGET,
     damage: 15,
+    draw: 1,
     energy: 3,
     charges: {
       current: 3,
@@ -85,6 +104,22 @@ export const cardTemplates = {
     charges: {
       current: 2,
       max: 2,
+    },
+    usedThisTurn: false
+  },
+
+  utilityPack: {
+    name: 'Utility Pack',
+    cardType: CardTypes.EQUIPMENT,
+    dragType: DragTypes.EQUIPMENT,
+    equippedDragType: DragTypes.NO_TARGET,
+    description: 'Draw 1 card.',
+    effect: EffectTypes.NO_TARGET,
+    draw: 1,
+    energy: 1,
+    charges: {
+      current: 3,
+      max: 3
     },
     usedThisTurn: false
   },
@@ -162,10 +197,16 @@ export const cardEffects = {
       player.block.current += card.block;
       player.floatingText.push({ type: 'gain-block', text: `+${card.block} Block` })
     }
+    if (card.draw) {
+      drawCard(draft);
+    }
   },
   [EffectTypes.SINGLE_TARGET]: (draft, card, player, target) => {
     if (card.damage) {
       dealDamage(target, card.damage);
+    }
+    if (card.draw) {
+      drawCard(draft);
     }
   },
   [EffectTypes.ALL_ENEMIES]: (draft, card, player) => {
@@ -176,6 +217,9 @@ export const cardEffects = {
           dealDamage(enemy, card.damage);
         }
       })
+    }
+    if (card.draw) {
+      drawCard(draft);
     }
   },
   [EffectTypes.MELEE_TARGET]: (draft, card, player) => {
@@ -188,28 +232,11 @@ export const cardEffects = {
         }
       }
     }
+    if (card.draw) {
+      drawCard(draft);
+    }
   },
   // [EffectTypes.BLOCK_NEXT_DAMAGE]: (draft, card, player, target) => {
   //
   // }
-}
-
-function dealDamage(target, amount) {
-  if (target.block.current < amount) {
-    amount -= target.block.current;
-    target.block.current = 0;
-    target.floatingText.push({ type: 'damage', text: `-${amount}` })
-  }
-  else {
-    target.block.current -= amount;
-    amount = 0;
-    target.floatingText.push({ type: 'blocked-all', text: `Blocked` })
-  }
-  target.health.current -= amount;
-
-  if (target.health.current <= 0) {
-    target.health.current = 0;
-    target.isDead = true;
-  }
-
 }
