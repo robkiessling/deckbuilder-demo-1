@@ -8,6 +8,9 @@ import {shuffleArray} from "../helpers.js";
 
 let id = 1;
 
+const MAX_STARTING_ENERGY = 5;
+const ENEMY_GAIN_ATK_PER_TURN = 2;
+
 const initialState = {
   isPlayerTurn: true,
 
@@ -21,8 +24,8 @@ const initialState = {
       max: 999
     },
     energy: {
-      current: 3,
-      max: 3,
+      current: 1,
+      max: 1,
     },
     floatingText: []
   },
@@ -46,13 +49,16 @@ createEnemy(initialState, 'hamster');
 createCardInDeck(initialState, 'quickShot');
 createCardInDeck(initialState, 'quickShot');
 createCardInDeck(initialState, 'rocketPunch');
+createCardInDeck(initialState, 'rocketPunch');
 createCardInDeck(initialState, 'emergencyShield');
+createCardInDeck(initialState, 'grenades');
 createCardInDeck(initialState, 'grenades');
 
 createCardInDeck(initialState, 'blaster');
 createCardInDeck(initialState, 'blaster');
 createCardInDeck(initialState, 'plasmaSword');
 createCardInDeck(initialState, 'rocketLauncher');
+createCardInDeck(initialState, 'shieldGenerator');
 createCardInDeck(initialState, 'shieldGenerator');
 
 shuffleDeck(initialState);
@@ -147,7 +153,13 @@ function gameReducer(draft, action) {
       break;
     }
     case 'startPlayerTurn': {
+      // todo making every enemy gain +1 atk
+      draft.enemyIds.forEach(enemyId => {
+        draft.enemiesById[enemyId].attack = draft.enemiesById[enemyId].attack + ENEMY_GAIN_ATK_PER_TURN;
+      })
+
       draft.isPlayerTurn = true;
+      draft.player.energy.max = Math.min(draft.player.energy.max + 1, MAX_STARTING_ENERGY); // increase energy every turn
       draft.player.energy.current = draft.player.energy.max;
       draft.player.block.current = 0;
       for (const card of Object.values(draft.cardsById)) {

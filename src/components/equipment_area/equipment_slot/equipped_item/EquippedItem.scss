@@ -37,4 +37,11 @@
     flex-shrink: 0;
   }
 
+  &.requires-target.can-use {
+    cursor: move;
+  }
+  &.requires-no-target.can-use {
+    cursor: pointer;
+  }
+
 }

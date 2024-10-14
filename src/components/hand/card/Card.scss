@@ -4,6 +4,7 @@
   border: 2px solid transparent;
   &.can-use {
     border: 2px solid #75ff75;
+    cursor: move;
   }
   &.insufficient {
     .energy {

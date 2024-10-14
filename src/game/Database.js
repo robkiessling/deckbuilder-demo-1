@@ -11,7 +11,7 @@ export const enemyTemplates = {
     block: {
       current: 0
     },
-    attack: 10
+    attack: 5
   },
   hamster: {
     name: 'Hamster',
@@ -23,7 +23,7 @@ export const enemyTemplates = {
     block: {
       current: 0
     },
-    attack: 3
+    attack: 1
   }
 }
 
@@ -38,8 +38,8 @@ export const cardTemplates = {
     damage: 6,
     energy: 2,
     charges: {
-      current: 4,
-      max: 4,
+      current: 3,
+      max: 3,
     },
     usedThisTurn: false
   },
@@ -81,7 +81,7 @@ export const cardTemplates = {
     description: 'Deal 20 damage to all enemies.',
     effect: EffectTypes.ALL_ENEMIES,
     damage: 20,
-    energy: 3,
+    energy: 5,
     charges: {
       current: 2,
       max: 2,
@@ -127,7 +127,7 @@ export const cardTemplates = {
     dragType: DragTypes.NO_TARGET,
     effect: EffectTypes.ALL_ENEMIES,
     description: 'Deal 9 damage to all enemies.',
-    energy: 1,
+    energy: 2,
     damage: 9,
   },
   rocketPunch: {
@@ -144,9 +144,9 @@ export const cardTemplates = {
     cardType: CardTypes.ABILITY,
     dragType: DragTypes.NO_TARGET,
     effect: EffectTypes.NO_TARGET,
-    description: 'Gain 15 block.',
+    description: 'Gain 20 block.',
     energy: 1,
-    block: 15,
+    block: 20,
   }
 }
 
