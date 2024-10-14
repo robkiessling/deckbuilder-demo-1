@@ -1,0 +1,17 @@
+
+.health-bar-container {
+  position: absolute;
+  bottom: -1rem;
+  left: 0;
+
+  height: 0.5rem;
+  width: 100%;
+
+  border: 1px solid #a9a9a9;
+  border-radius: 2px;
+
+  .health-bar-fill {
+    background: red;
+    height: 100%;
+  }
+}

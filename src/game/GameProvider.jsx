@@ -48,6 +48,8 @@ createEnemy(initialState, 'hamster');
 
 createCardInDeck(initialState, 'quickShot');
 createCardInDeck(initialState, 'quickShot');
+createCardInDeck(initialState, 'aimedShot');
+createCardInDeck(initialState, 'aimedShot');
 createCardInDeck(initialState, 'rocketPunch');
 createCardInDeck(initialState, 'rocketPunch');
 createCardInDeck(initialState, 'emergencyShield');
@@ -62,6 +64,7 @@ createCardInDeck(initialState, 'shieldGenerator');
 createCardInDeck(initialState, 'shieldGenerator');
 
 shuffleDeck(initialState);
+drawCard(initialState);
 drawCard(initialState);
 drawCard(initialState);
 drawCard(initialState);

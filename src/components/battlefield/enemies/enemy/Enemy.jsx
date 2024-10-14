@@ -5,6 +5,7 @@ import {DragTypes} from "../../../../constants.js";
 import {useGameDispatch, useGameState} from "../../../../game/GameContext.js";
 import {useEffect, useState} from "react";
 import FloatingText from "../../../ui/floating_text/FloatingText.jsx";
+import HealthBar from "../../../ui/health_bar/HealthBar.jsx";
 
 export default function Enemy({enemyId}) {
   const enemy = useGameState().enemiesById[enemyId];
@@ -62,6 +63,7 @@ export default function Enemy({enemyId}) {
         <span className={'name'}>{enemy.name}</span>
         <span>HP: {enemy.health.current} / {enemy.health.max}</span>
         <span>ATK: {enemy.attack}</span>
+        <HealthBar target={enemy} />
       </div>
     </div>
   )

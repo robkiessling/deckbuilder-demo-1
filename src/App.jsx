@@ -8,6 +8,7 @@ import Battlefield from "./components/battlefield/Battlefield.jsx";
 import Hand from "./components/hand/Hand.jsx";
 import Energy from "./components/energy/Energy.jsx";
 import EndTurn from "./components/end_turn/EndTurn.jsx";
+import Info from "./components/info/Info.jsx";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Hand />
         <Energy />
         <EndTurn />
+        <Info />
       </DndProvider>
     </GameProvider>
   )
