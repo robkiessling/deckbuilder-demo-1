@@ -24,10 +24,13 @@
     font-weight: bold;
     padding: 0.5rem 0;
     flex-shrink: 0;
+    text-align: center;
   }
 
   .description {
+    font-size: 0.65rem;
     flex: 1 1 auto;
+    text-align: center;
   }
 
   .charges {

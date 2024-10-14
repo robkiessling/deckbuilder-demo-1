@@ -34,7 +34,7 @@ export default function Card({cardId}) {
   }
 
   const cardClass = `card ${isDragging ? 'is-dragging' : ''} ${canUse ? 'can-use' : 'cannot-use'} ` +
-    `${enoughEnergy ? 'sufficient' : 'insufficient'}`
+    `${enoughEnergy ? 'sufficient' : 'insufficient'} ${card.cardType}`
 
   return (
     <div ref={drag} className={cardClass}>
@@ -42,6 +42,7 @@ export default function Card({cardId}) {
       <span className={'name'}>{card.name}</span>
       <span className={'type'}>{cardType}</span>
       <span className={'description'}>{card.description}</span>
+      {card.charges && <span className={'charges'}>{card.charges.max} Charges</span>}
     </div>
   )
 }

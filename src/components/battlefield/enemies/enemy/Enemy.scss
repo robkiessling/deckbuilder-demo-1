@@ -1,16 +1,17 @@
 
 .enemy-frame {
-  width: 15rem; // extra width for animation room
+  width: 10rem; // extra width for animation room
   display: flex;
   justify-content: center;
+  flex-shrink: 0;
 
   .enemy {
     position: relative;
 
     background: red;
-    height: 10rem;
-    width: 10rem;
-    padding: 1rem;
+    height: 6rem;
+    width: 7rem;
+    padding: 1rem 0;
     border-radius: 5px;
 
     display: flex;

@@ -39,22 +39,22 @@ const initialState = {
 }
 
 createEnemy(initialState, 'goblin');
+createEnemy(initialState, 'goblin');
 createEnemy(initialState, 'hamster');
-createCardInDeck(initialState, 'attack');
-createCardInDeck(initialState, 'attack');
-// createCardInDeck(initialState, 'attack');
-// createCardInDeck(initialState, 'attack');
-// createCardInDeck(initialState, 'attack');
-// createCardInDeck(initialState, 'attack');
+createEnemy(initialState, 'hamster');
+
+createCardInDeck(initialState, 'quickShot');
+createCardInDeck(initialState, 'quickShot');
+createCardInDeck(initialState, 'rocketPunch');
+createCardInDeck(initialState, 'emergencyShield');
+createCardInDeck(initialState, 'grenades');
+
 createCardInDeck(initialState, 'blaster');
-// createCardInDeck(initialState, 'blaster');
-createCardInDeck(initialState, 'block');
-// createCardInDeck(initialState, 'attack');
-// createCardInDeck(initialState, 'attack');
-// createCardInDeck(initialState, 'block');
-// createCardInDeck(initialState, 'attack');
-// createCardInDeck(initialState, 'attack');
-// createCardInDeck(initialState, 'block');
+createCardInDeck(initialState, 'blaster');
+createCardInDeck(initialState, 'plasmaSword');
+createCardInDeck(initialState, 'rocketLauncher');
+createCardInDeck(initialState, 'shieldGenerator');
+
 shuffleDeck(initialState);
 drawCard(initialState);
 drawCard(initialState);
@@ -188,6 +188,13 @@ function gameReducer(draft, action) {
       const effect = cardEffects[card.effect]
       effect(draft, card, draft.player, draft.enemiesById[action.enemyId])
       discardCard(draft, action.cardId);
+      break;
+    }
+    case 'useEquipmentNoTarget': {
+      const card = draft.cardsById[action.cardId];
+      const effect = cardEffects[card.effect];
+      effect(draft, card, draft.player)
+      activateEquipment(draft, action.cardId);
       break;
     }
     case 'useEquipmentOnEnemy': {

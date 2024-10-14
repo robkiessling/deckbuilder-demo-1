@@ -53,7 +53,7 @@ export default function Battlefield() {
     accept: DragTypes.NO_TARGET,
     drop: (item) => {
       dispatch({
-        type: 'useCardNoTarget',
+        type: item.equipment ? 'useEquipmentNoTarget' : 'useCardNoTarget',
         cardId: item.cardId
       })
     },
